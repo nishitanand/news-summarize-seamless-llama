@@ -61,7 +61,7 @@ del translator
 gc.collect()
 torch.cuda.empty_cache()
 
-dataframe.to_csv('trans_eng.csv')
+dataframe.to_csv('intermediate_files/trans_eng.csv')
 
 
 
@@ -149,7 +149,7 @@ def get_text_summarization(text):
         return None  # You can choose to return None or some default value for rows with errors
 
 
-df = pd.read_csv('trans_eng.csv')
+df = pd.read_csv('intermediate_files/trans_eng.csv')
 
 
 df['english_summary'] = None
@@ -160,7 +160,7 @@ for i, row in df.iterrows():
     df.at[i, 'english_summary'] = llama_output
 
 
-df.to_csv('eng_summary.csv')
+df.to_csv('intermediate_files/eng_summary.csv')
 
 del model
 del tokenizer
@@ -169,7 +169,7 @@ gc.collect()
 torch.cuda.empty_cache()
 
 
-df = pd.read_csv('eng_summary.csv')
+df = pd.read_csv('intermediate_files/eng_summary.csv')
 df['english_summary']
 
 df.drop('Unnamed: 0', axis=1, inplace=True)
@@ -200,7 +200,7 @@ df['source_lang_summary'] = df['english_summary'].apply(split_summarise)
 
 finaldf = df.drop(columns=['english_translation', 'english_summary'])
 
-df.to_csv('pipeline_summary.csv')
+df.to_csv('intermediate_files/pipeline_summary.csv')
 # finaldf.to_csv('final_summary.csv')
 finaldf.to_csv(os.path.join(str(args.output_csv_path), 'final_summary.csv'))
 
